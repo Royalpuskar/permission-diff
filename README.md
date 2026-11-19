@@ -2,11 +2,11 @@
 
 Compare permission manifests and surface added or removed privileges.
 
-**Status:** implemented browser-local research prototype. Automated tests can be reproduced with the command below. Deployment status is recorded separately; a planned URL is not proof of a working deployment.
+**Status:** implemented browser-local research prototype. Automated tests can be reproduced with the command below. GitHub Pages deployed and browser smoke checks completed on 19 November 2026.
 
 ## Website
 
-Intended GitHub Pages address: https://royalpuskar.github.io/permission-diff/
+Live website: https://royalpuskar.github.io/permission-diff/
 
 ## Problem and approach
 
@@ -71,6 +71,8 @@ Compares supplied strings only; it does not read cloud policies or determine eff
 The interface shares a portfolio design system, while this repository has its own domain engine, fixture, and tests. No accuracy, novelty, production-readiness, or 4K visual-test claim is made. Large-screen CSS is not a substitute for device testing.
 
 ## Validation
+
+Three local test cases passed on 19 November 2026. Browser checks verified initial results, invalid-input errors, stale-export prevention, and reset. These are smoke checks, not exhaustive browser coverage.
 
 `test.mjs` checks domain outcomes and edge cases, deterministic behavior, input preservation, malformed roots, and size limits. GitHub Actions runs the same suite. Review the tests themselves to see exactly what is covered; passing these checks does not establish security or exhaustive correctness.
 
