@@ -34,7 +34,7 @@ Multi-source breadth-first traversal produces shortest implication paths. Sorted
 
 This is a model of declared implications, **not effective authorization in a cloud service**. There are no deny rules, principals, conditions, resource scopes or provider-specific semantics. Wildcards are literal text. Incorrect or incomplete implications produce correspondingly incomplete results. No claims about a real deployment follow.
 
-Validation: all **11 local tests passed**, comprising three original tests and eight new closure tests. The new suite checks retained implied access, revocation, cycles, duplicate edges, deterministic shortest paths, malformed/oversized input and all 64 directed graphs on three labels against a separate fixed-point reachability oracle. UI JavaScript syntax was checked. The new page's deployment, interactions, mobile layout and 3840×2160 layout have not yet been verified.
+Validation: all **11 local tests passed**, comprising three original tests and eight new closure tests. The new suite checks retained implied access, revocation, cycles, duplicate edges, deterministic shortest paths, malformed/oversized input and all 64 directed graphs on three labels against a separate fixed-point reachability oracle. UI JavaScript syntax was checked. The deployed page was exercised in a desktop browser: the synthetic example preserves files:read through workspace:admin, the Added filter shows only network:connect, invalid rule syntax produces an error, edits disable stale downloads, and reset restores the sample. Downloaded file contents, mobile layout and 3840×2160 layout remain unverified. Remote CI execution for this change has not been confirmed.
 
 ## Problem and approach
 
