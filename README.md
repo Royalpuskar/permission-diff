@@ -8,6 +8,34 @@ Compare permission manifests and surface added or removed privileges.
 
 Live website: https://royalpuskar.github.io/permission-diff/
 
+## Declared scope review
+
+[Scope Review page](https://royalpuskar.github.io/permission-diff/scope-review.html) · [Engine](closure.mjs) · [Tests](closure.test.mjs)
+
+Removing a direct grant may leave the same permission reachable through a broader grant. Scope Review compares the transitive closure of two grant sets under **user-declared implications**. It shows effective additions/removals, shortest explanation paths, and permissions that remain reachable after their direct grants were removed.
+
+The dedicated page uses side-by-side Before/After grant fields, an implication editor and an evidence ledger. Enter one grant per line and one `parent → child` (or `parent => child`) rule per line. The line editor reserves those arrow separators; the module API accepts labels directly. A filter narrows the ledger; editing inputs invalidates downloads. Reset restores a synthetic fixture. Export includes the supplied model and results.
+
+```js
+import { compareClosure } from './closure.mjs';
+const result = compareClosure({
+  before: ['admin', 'read'],
+  after: ['admin'],
+  implications: [
+    { from: 'admin', to: 'write' },
+    { from: 'write', to: 'read' }
+  ]
+});
+// retainedAfterDirectRemoval: ['read']
+// Explanation after change: admin → write → read
+```
+
+Multi-source breadth-first traversal produces shortest implication paths. Sorted grants and adjacent labels make ties deterministic independent of rule order. Cycles and duplicate grants/rules are supported. Input is capped at 100000 serialized characters, 200 grants per side, 500 rules and 300 distinct labels. Labels are case-sensitive, trimmed strings of 1–100 characters.
+
+This is a model of declared implications, **not effective authorization in a cloud service**. There are no deny rules, principals, conditions, resource scopes or provider-specific semantics. Wildcards are literal text. Incorrect or incomplete implications produce correspondingly incomplete results. No claims about a real deployment follow.
+
+Validation: all **11 local tests passed**, comprising three original tests and eight new closure tests. The new suite checks retained implied access, revocation, cycles, duplicate edges, deterministic shortest paths, malformed/oversized input and all 64 directed graphs on three labels against a separate fixed-point reachability oracle. UI JavaScript syntax was checked. The new page's deployment, interactions, mobile layout and 3840×2160 layout have not yet been verified.
+
 ## Problem and approach
 
 This tool makes the supplied security scenario inspectable through explicit rules, per-item results, and exportable evidence. It runs the same pure JavaScript engine in the browser and Node tests. All input is provided by the user or the included synthetic fixture; no external facts are inferred.
@@ -33,7 +61,7 @@ python3 -m http.server 8000
 Open http://localhost:8000. Do not open index.html through a file URL; ES modules require a server.
 
 ```sh
-node --test test.mjs
+node --test test.mjs closure.test.mjs
 ```
 
 ## Example and schema
@@ -66,7 +94,7 @@ There is no application authentication, credential store, session cookie, or tok
 
 ## Limitations
 
-Compares supplied strings only; it does not read cloud policies or determine effective authorization.
+The original page compares supplied strings only. Scope Review additionally follows declared implications; neither reads cloud policies nor determines real-world effective authorization.
 
 The interface shares a portfolio design system, while this repository has its own domain engine, fixture, and tests. No accuracy, novelty, production-readiness, or 4K visual-test claim is made. Large-screen CSS is not a substitute for device testing.
 
